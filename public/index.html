@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Weather App</title>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f2f2f2;
+            }
+    
+            h1, h2 {
+                margin-top: 20px;
+                text-align: center;
+            }
+    
+            form {
+                max-width: 400px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            label {
+                display: block;
+                margin-bottom: 8px;
+            }
+    
+            input[type="text"], input[type="date"] {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+    
+            button[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+    
+            button[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+    
+            #current-weather-result, #weather-forecast-result, #weather-history-result {
+                margin-top: 20px;
+                padding: 10px;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                white-space: pre-wrap;
+            }
+        </style>
+        
+    </head>
+    <body>
+        <h1>Weather App</h1>
+
+        <!-- Current Weather Form -->
+        <h2>Current Weather</h2>
+        <form id="current-weather-form">
+            <label for="current-location">Location:</label>
+            <input
+                type="text"
+                id="current-location"
+                name="location"
+                placeholder="Enter location"
+            />
+            <button type="submit">Get Current Weather</button>
+        </form>
+        <div id="current-weather-result"></div>
+
+        <!-- Weather Forecast Form -->
+        <h2>Weather Forecast</h2>
+        <form id="weather-forecast-form">
+            <label for="forecast-location">Location:</label>
+            <input
+                type="text"
+                id="forecast-location"
+                name="location"
+                placeholder="Enter location"
+            />
+            <button type="submit">Get Weather Forecast</button>
+        </form>
+        <div id="weather-forecast-result"></div>
+
+        <!-- Weather History Form -->
+        <h2>Weather History</h2>
+        <form id="weather-history-form">
+            <label for="history-location">Location:</label>
+            <input
+                type="text"
+                id="history-location"
+                name="location"
+                placeholder="Enter location"
+            />
+            <label for="history-date">Date:</label>
+            <input type="date" id="history-date" name="date" />
+            <button type="submit">Get Weather History</button>
+        </form>
+        <div id="weather-history-result"></div>
+
+        <script>
+            // Function to make AJAX requests
+            function fetchWeather(url, formData, resultDivId) {
+                // Remove the body parameter for GET requests
+                fetch(url + "?" + new URLSearchParams(formData), {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        document.getElementById(resultDivId).innerText =
+                            JSON.stringify(data, null, 2);
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        document.getElementById(resultDivId).innerText =
+                            "An error occurred. Please try again.";
+                    });
+            }
+
+            // Event listener for current weather form submission
+            document
+                .getElementById("current-weather-form")
+                .addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    const formData = new FormData(this);
+                    fetchWeather(
+                        "/current-weather",
+                        formData,
+                        "current-weather-result"
+                    );
+                });
+
+            // Event listener for weather forecast form submission
+            document
+                .getElementById("weather-forecast-form")
+                .addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    const formData = new FormData(this);
+                    fetchWeather(
+                        "/weather-forecast",
+                        formData,
+                        "weather-forecast-result"
+                    );
+                });
+
+            // Event listener for weather history form submission
+            document
+                .getElementById("weather-history-form")
+                .addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    const formData = new FormData(this);
+                    fetchWeather(
+                        "/weather-history",
+                        formData,
+                        "weather-history-result"
+                    );
+                });
+        </script>
+    </body>
+</html>
