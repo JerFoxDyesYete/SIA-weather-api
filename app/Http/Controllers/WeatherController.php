@@ -12,7 +12,7 @@ class WeatherController extends Controller
     //GET CURRENT WEATHER via location parameter
     public function getCurrentWeather(Request $request): JsonResponse
     {
-        $location = $request->input('location', 'Philippines'); // Default location if location is not provided
+        $location = $request->input('location', ''); // Default location if location is not provided
         $client = new Client();
 
         $host = env('RAPIDAPI_HOST');
@@ -36,7 +36,7 @@ class WeatherController extends Controller
 
     public function getForecast(Request $request)
     {
-        $location = $request->input('location', 'Philippines'); //DEFAULT LOCATION IF LOCATION IS NOT PROVIDED
+        $location = $request->input('location', ''); //DEFAULT LOCATION IF LOCATION IS NOT PROVIDED
         $client = new Client();
 
         $host = env('RAPIDAPI_HOST');
@@ -60,7 +60,7 @@ class WeatherController extends Controller
 
     public function getHistory(Request $request): JsonResponse
     {
-        $location = $request->input('location', 'Philippines');
+        $location = $request->input('location', '');
         $date = $request->input('date', ''); // data format YEAR-MONTH-DATE (2024-05-20)
 
         if (empty($date)) {
